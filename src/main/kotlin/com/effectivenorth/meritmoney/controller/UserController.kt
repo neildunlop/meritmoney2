@@ -23,10 +23,9 @@ class UserController(val userRepository: UserRepository) {
     @RequestMapping(method = arrayOf(RequestMethod.GET),
             consumes = arrayOf("application/json"),
             produces = arrayOf("application/json"))
-    fun addUser(@RequestBody user: User): User {
-        userRepository.save(UserEntity.createFromUser(user))
+    fun addUser(@RequestBody user: User): User = User.createFromEntity(userRepository.save(UserEntity.createFromUser(user)))
 
-    }
+
 
 
     //TODO("Delete method")
