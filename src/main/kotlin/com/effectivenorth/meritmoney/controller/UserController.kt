@@ -24,8 +24,7 @@ class UserController(val userRepository: UserRepository) {
             consumes = arrayOf("application/json"),
             produces = arrayOf("application/json"))
     fun addUser(@RequestBody user: User): User {
-        var entity = UserEntity.createFromUser(user)
-        userRepository.save(entity)
+        userRepository.save(UserEntity.createFromUser(user))
 
     }
 

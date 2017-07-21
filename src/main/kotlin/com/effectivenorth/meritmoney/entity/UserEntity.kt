@@ -19,8 +19,8 @@ data class UserEntity(@Id val id: UUID, val forename: String, val surname: Strin
     }
 
     companion object {
-        fun createFromUser(user:User) : User {
-            return User(user.id, user.forename, user.surname)
+        fun createFromUser(user:User) : UserEntity {
+            return UserEntity(user.id, user.forename, user.surname)
         }
     }
 
