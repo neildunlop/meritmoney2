@@ -9,6 +9,7 @@ import javax.persistence.Id
 @Entity
 data class UserEntity(@Id val id: UUID, val forename: String, val surname: String) {
 
+    @Transient
     private val logger = KotlinLogging.logger {}
 
     var credit: Double = 0.0

@@ -14,8 +14,8 @@ import java.util.*
 class UserController(val userRepository: UserRepository) {
 //Note that constructor injection is the preferred approach in Kotlin.. and I like it too.
 
-    @RequestMapping(method = arrayOf(RequestMethod.GET), produces = arrayOf("application/json"))
-    fun getUser(@PathVariable id: UUID): User? = User.createFromEntity(userRepository.findOne(id))
+//    @RequestMapping(method = arrayOf(RequestMethod.GET), produces = arrayOf("application/json"))
+//    fun getUser(@PathVariable id: UUID): User? = User.createFromEntity(userRepository.findOne(id))
 
     @RequestMapping(method = arrayOf(RequestMethod.GET), produces = arrayOf("application/json"))
     fun getAllUsers(): List<User> = User.createFromEntities(userRepository.findAll().toList())
@@ -24,9 +24,6 @@ class UserController(val userRepository: UserRepository) {
             consumes = arrayOf("application/json"),
             produces = arrayOf("application/json"))
     fun addUser(@RequestBody user: User): User = User.createFromEntity(userRepository.save(UserEntity.createFromUser(user)))
-
-
-
 
     //TODO("Delete method")
 }
