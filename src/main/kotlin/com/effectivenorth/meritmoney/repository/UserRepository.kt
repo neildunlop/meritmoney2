@@ -9,17 +9,7 @@ import java.util.*
  */
 interface UserRepository : CrudRepository<UserEntity, UUID> {
 
-//    fun findOne(id: UUID): User? {
-//        TODO("not implemented")
-//    }
-//
-//    fun save(user: User): User? {
-//        TODO("not implemented")
-//    }
-//
-//    fun findAll(): List<User> {
-//        TODO("not properly implemented")
-//        val results: List<User> = listOf<User>()
-//        return results
-//    }
+    fun findByForename(forename: String): UserEntity
+    fun findBySurname(surname: String): UserEntity
+
 }
