@@ -2,12 +2,17 @@ package com.effectivenorth.meritmoney.entity
 
 import com.effectivenorth.meritmoney.domain.User
 import mu.KotlinLogging
+import java.io.Serializable
 import java.util.*
 import javax.persistence.Entity
 import javax.persistence.Id
 
 @Entity
-data class UserEntity(@Id val id: UUID, val forename: String, val surname: String) {
+data class UserEntity(@Id val id: UUID, val forename: String, val surname: String) : Serializable {
+
+    //no-args constructor just for spring data/hibernate's benefit
+    @Suppress("unused")
+    private constructor() : this(id = UUID.randomUUID(), forename="", surname="")
 
     @Transient  //make sure JPA doesn't try to serialise this
     private val logger = KotlinLogging.logger {}

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import java.util.*
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 
 @RunWith(SpringRunner::class)
@@ -61,5 +62,44 @@ class UserRepositoryTest {
 
         val result = userRepository.findBySurname(user2.surname)
         assertEquals(user2, result);
+    }
+
+    @Test
+    fun canSaveNewUser() {
+
+        val user1 = UserEntity(UUID.randomUUID(), "Bob", "Jones")
+
+        val result = userRepository.save(user1)
+        assertEquals(user1, result);
+    }
+
+    @Test
+    fun savingModifiedUserUpdatesExistingEntry() {
+
+        val user1 = UserEntity(UUID.randomUUID(), "Bob", "Jones")
+        val modifiedUser1 = user1.copy(forename = "Robert")
+
+        entityManager.persist(user1)
+        entityManager.flush()
+
+        //very weird.. the save actually updates the 'user1' instance in memory too - hibernate voodoo
+        val result = userRepository.save(modifiedUser1)
+
+        //would expect this to fail.. but it doesn't!
+        //assertEquals(user1, modifiedUser1)
+        assertEquals(modifiedUser1, result)
+    }
+
+    @Test
+    fun canDeleteExistingUser() {
+
+        val user1 = UserEntity(UUID.randomUUID(), "Bob", "Jones")
+
+        entityManager.persist(user1)
+        entityManager.flush()
+
+        userRepository.delete(user1)
+
+        assertNull(entityManager.find(UserEntity::class.java, user1.id))
     }
 }

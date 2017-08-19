@@ -18,6 +18,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -100,16 +101,40 @@ class UserControllerIT {
     }
 
     @Test
-    fun `POST with valid user is successful`() {
+    fun `DELETE with UUID removes specific element`() {
+
+        mockMvc.perform(delete("/api/v1/users/${user1.id}"))
+                .andExpect(status().is2xxSuccessful)
+                .andExpect(jsonPath("$.id", equalTo(user1.id.toString())))
+                .andExpect(jsonPath("$.forename", equalTo(user1.forename)))
+                .andExpect(jsonPath("$.surname", equalTo(user1.surname)))
+    }
+
+    @Test
+    fun `POST with duplicate user returns Duplicate Item Exception`() {
 
         val content = converter.objectMapper.writeValueAsString(user1);
 
         mockMvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated)
+                .andExpect(status().isConflict)
                 .andExpect(jsonPath("$.id", equalTo(user1.id.toString())))
                 .andExpect(jsonPath("$.forename", equalTo(user1.forename)))
                 .andExpect(jsonPath("$.surname", equalTo(user1.surname)))
     }
+
+//    @Test
+//    fun `PUT with valid user updates existing user`() {
+//
+//        val content = converter.objectMapper.writeValueAsString(user1);
+//
+//        mockMvc.perform(post("/api/v1/users")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(content).accept(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isCreated)
+//                .andExpect(jsonPath("$.id", equalTo(user1.id.toString())))
+//                .andExpect(jsonPath("$.forename", equalTo(user1.forename)))
+//                .andExpect(jsonPath("$.surname", equalTo(user1.surname)))
+//    }
 }

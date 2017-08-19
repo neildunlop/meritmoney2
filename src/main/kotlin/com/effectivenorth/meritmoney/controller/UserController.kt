@@ -26,11 +26,11 @@ class UserController(val userRepository: UserRepository) {
 
 
     @GetMapping(produces = arrayOf("application/json"))
-    fun getAllUsers(): List<User> = User.createFromEntities(userRepository.findAll().toList())
+    fun getAllUsers(): ResponseEntity<List<User>> =
+            ResponseEntity(User.createFromEntities(userRepository.findAll().toList()), HttpStatus.OK)
 
 
-    @PostMapping(consumes = arrayOf("application/json"),
-            produces = arrayOf("application/json"))
+    @PostMapping(consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
     fun addUser(@RequestBody user: User): ResponseEntity<User> =
             ResponseEntity(User.createFromEntity(userRepository.save(UserEntity.createFromUser(user))), HttpStatus.CREATED)
 
