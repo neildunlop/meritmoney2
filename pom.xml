@@ -114,8 +114,12 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <version>${kotlin.version}</version>
                 <configuration>
+                    <!-- compiler plugins make zero arg constructors available via reflection so that spring and
+                    jpa can work without us having to make crappy constructor.. but they make sure that the constructors
+                    cannot be called from our code-->
                     <compilerPlugins>
                         <plugin>spring</plugin>
+                        <plugin>jpa</plugin>
                     </compilerPlugins>
                     <jvmTarget>1.8</jvmTarget>
                 </configuration>

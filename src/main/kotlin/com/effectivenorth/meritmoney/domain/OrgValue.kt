@@ -6,7 +6,7 @@ import java.util.*
 
 class OrgValue(val id: UUID, val title:String, val description:String) {
 
-    private val logger = KotlinLogging.logger() {}
+    private val logger = KotlinLogging.logger {}
 
     init {
         logger.debug { "Org Value $id initialised." }

@@ -10,8 +10,8 @@ import javax.persistence.Id
 @Entity
 data class OrgValueEntity(@Id val id:UUID, val title: String, val description: String) : Serializable {
 
-    @Suppress("unused")
-    private constructor() : this(id=UUID.randomUUID(), title = "", description = "")
+//    @Suppress("unused")
+//    private constructor() : this(id=UUID.randomUUID(), title = "", description = "")
 
     @Transient
     private val logger = KotlinLogging.logger {}
