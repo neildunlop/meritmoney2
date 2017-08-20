@@ -18,6 +18,8 @@ class User(val id: UUID, val forename: String, val surname: String) {
         logger.info { "User $id initialised." }
     }
 
+    //TODO: Add KudosSend and KudosReceived
+
     companion object {
         fun createFromEntity(entity: UserEntity): User {
             return User(entity.id, entity.forename, entity.surname)

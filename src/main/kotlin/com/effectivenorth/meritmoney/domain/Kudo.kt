@@ -20,7 +20,8 @@ class Kudo(val id: UUID, val sender:User, val recipient:User, val summary:String
         }
 
         fun createFromEntities(entities: List<KudoEntity>) : List<Kudo> {
-            return entities.map { it-> Kudo(it.id, User.createFromEntity(it.sender), User.createFromEntity(it.recipient), it.summary, it.detail, OrgValue.createFromEntity(it.orgValue), it.worth) }
+            return entities.map { it-> Kudo(it.id, User.createFromEntity(it.sender), User.createFromEntity(it.recipient),
+                    it.summary, it.detail, OrgValue.createFromEntity(it.orgValue), it.worth) }
         }
     }
 }
