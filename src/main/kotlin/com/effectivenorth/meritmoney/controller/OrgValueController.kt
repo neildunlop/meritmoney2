@@ -1,12 +1,9 @@
 package com.effectivenorth.meritmoney.controller
 
 import com.effectivenorth.meritmoney.domain.OrgValue
-import com.effectivenorth.meritmoney.domain.User
 import com.effectivenorth.meritmoney.entity.OrgValueEntity
-import com.effectivenorth.meritmoney.entity.UserEntity
 import com.effectivenorth.meritmoney.exceptions.NotFoundItemException
 import com.effectivenorth.meritmoney.repository.OrgValueRepository
-import com.effectivenorth.meritmoney.repository.UserRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

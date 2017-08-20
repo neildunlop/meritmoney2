@@ -1,6 +1,5 @@
 package com.effectivenorth.meritmoney.entity
 
-import com.effectivenorth.meritmoney.domain.User
 import org.junit.Test
 import java.util.*
 import kotlin.test.assertEquals
@@ -18,7 +17,7 @@ class OrgValueEntityTest {
         val description = "Working as a team is better than working alone."
 
 
-        val testEntity: OrgValueEntity = OrgValueEntity(id, title, description)
+        val testEntity = OrgValueEntity(id, title, description)
 
         assertEquals(id, testEntity.id)
         assertEquals(title, testEntity.title)

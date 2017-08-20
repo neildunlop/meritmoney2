@@ -2,6 +2,8 @@ package com.effectivenorth.meritmoney.controller
 
 import com.effectivenorth.meritmoney.entity.UserEntity
 import com.effectivenorth.meritmoney.repository.UserRepository
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.junit.Before
@@ -9,35 +11,32 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import java.util.*
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 
 
 @RunWith(SpringRunner::class)
 @SpringBootTest
 @AutoConfigureMockMvc
-class UserControllerIT {
+class UserControllerTest {
 
     @Mock
     var mockRepository: UserRepository = Mockito.mock(UserRepository::class.java)
 
     lateinit var controller: UserController
+    val baseUrl = "/api/v1/users"
 
     @Autowired
     lateinit var mockMvc: MockMvc
@@ -65,7 +64,7 @@ class UserControllerIT {
 
         `when`(mockRepository.findAll()).thenReturn(users)
 
-        mockMvc.perform(get("/api/v1/users"))
+        mockMvc.perform(get(baseUrl))
                 .andExpect(status().is2xxSuccessful)
                 .andExpect(jsonPath("$", hasSize<Any>(2)))
                 .andExpect(jsonPath("$[0].id", equalTo(user1.id.toString())))
@@ -81,7 +80,7 @@ class UserControllerIT {
 
         `when`(mockRepository.findOne(user1.id)).thenReturn(user1)
 
-        mockMvc.perform(get("/api/v1/users/${user1.id}"))
+        mockMvc.perform(get(baseUrl+"/${user1.id}"))
                 .andExpect(status().is2xxSuccessful)
                 .andExpect(jsonPath("$.id", equalTo(user1.id.toString())))
                 .andExpect(jsonPath("$.forename", equalTo(user1.forename)))
@@ -91,7 +90,7 @@ class UserControllerIT {
     @Test
     fun `GET with non-existent UUID returns item not found exception`() {
 
-        mockMvc.perform(get("/api/v1/users/${UUID.randomUUID()}"))
+        mockMvc.perform(get(baseUrl+"/${UUID.randomUUID()}"))
                 .andExpect(status().isNotFound)
                 .andExpect(status().reason("Item not found."))
     }
@@ -100,7 +99,7 @@ class UserControllerIT {
     fun `DELETE with UUID removes specific element`() {
 
         //TODO: Not sure about this.. the entity is not in the repository.
-        mockMvc.perform(delete("/api/v1/users/${user1.id}"))
+        mockMvc.perform(delete(baseUrl+"/${user1.id}"))
                 .andExpect(status().is2xxSuccessful)
     }
 
@@ -111,7 +110,7 @@ class UserControllerIT {
 
         val content = converter.objectMapper.writeValueAsString(user1);
 
-        mockMvc.perform(post("/api/v1/users")
+        mockMvc.perform(post(baseUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful)
@@ -125,7 +124,7 @@ class UserControllerIT {
 //
 //        val content = converter.objectMapper.writeValueAsString(user1);
 //
-//        mockMvc.perform(post("/api/v1/users")
+//        mockMvc.perform(post(baseUrl)
 //                .contentType(MediaType.APPLICATION_JSON)
 //                .content(content).accept(MediaType.APPLICATION_JSON))
 //                .andExpect(status().isConflict)
@@ -141,7 +140,7 @@ class UserControllerIT {
 
         val content = converter.objectMapper.writeValueAsString(user1);
 
-        mockMvc.perform(post("/api/v1/users")
+        mockMvc.perform(post(baseUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated)

@@ -1,7 +1,6 @@
 package com.effectivenorth.meritmoney.repository
 
 import com.effectivenorth.meritmoney.entity.OrgValueEntity
-import com.effectivenorth.meritmoney.entity.UserEntity
 import org.springframework.data.repository.CrudRepository
 import java.util.*
 

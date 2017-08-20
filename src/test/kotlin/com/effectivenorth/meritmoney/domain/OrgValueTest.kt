@@ -1,7 +1,7 @@
 package com.effectivenorth.meritmoney.domain
 
 import com.effectivenorth.meritmoney.entity.OrgValueEntity
-import com.effectivenorth.meritmoney.entity.UserEntity import org.junit.Test
+import org.junit.Test
 import java.util.*
 import kotlin.test.assertEquals
 
