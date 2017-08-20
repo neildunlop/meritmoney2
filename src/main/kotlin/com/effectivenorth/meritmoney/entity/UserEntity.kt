@@ -20,6 +20,9 @@ data class UserEntity(@Id val id: UUID, val forename: String, val surname: Strin
     var credit: Double = 0.0
     var balance: Double = 0.0
 
+    //TODO: Need to add one to many mapping to kudosSent and
+    //TODO: Need to add one to many mapping to kudosReceived
+
     init {
         logger.info {"User Entity $id initialised."}
     }

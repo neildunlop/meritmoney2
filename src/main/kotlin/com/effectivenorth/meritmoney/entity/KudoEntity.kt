@@ -1,8 +1,6 @@
 package com.effectivenorth.meritmoney.entity
 
 import com.effectivenorth.meritmoney.domain.Kudo
-import com.effectivenorth.meritmoney.domain.OrgValue
-import com.effectivenorth.meritmoney.domain.User
 import mu.KotlinLogging
 import java.io.Serializable
 import java.util.*
