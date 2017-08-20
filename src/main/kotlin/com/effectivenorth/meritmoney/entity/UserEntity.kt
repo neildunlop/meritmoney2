@@ -28,8 +28,9 @@ data class UserEntity(@Id val id: UUID, val forename: String, val surname: Strin
         fun createFromUser(user:User) : UserEntity {
             return UserEntity(user.id, user.forename, user.surname)
         }
+
+        fun createFromUsers(users: List<User>): List<UserEntity> {
+            return users.map { it -> UserEntity(it.id, it.forename, it.surname)}
+        }
     }
-
-
-
 }

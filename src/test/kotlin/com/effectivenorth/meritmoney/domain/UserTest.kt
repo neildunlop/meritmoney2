@@ -22,6 +22,8 @@ class UserTest {
         assertEquals(id, testUser.id)
         assertEquals(forename, testUser.forename)
         assertEquals(surname, testUser.surname)
+        assertEquals(0.0, testUser.balance)
+        assertEquals(0.0, testUser.credit)
     }
 
     @Test
@@ -37,5 +39,34 @@ class UserTest {
         assertEquals(id, testUser.id)
         assertEquals(forename, testUser.forename)
         assertEquals(surname, testUser.surname)
+        assertEquals(0.0, testUser.balance)
+        assertEquals(0.0, testUser.credit)
+    }
+
+    @Test
+    fun canCreateUserCollectionFromEntities() {
+
+        val id1 = UUID.randomUUID()
+        val forename1 = "Bob"
+        val surname1 = "Jones"
+
+        val id2 = UUID.randomUUID()
+        val forename2 = "Steve"
+        val surname2 = "Smith"
+
+        val testUser1 = User(id1, forename1, surname1)
+        val testUser2 = User(id2, forename2, surname2)
+
+        val userEntities = listOf(testUser1, testUser2)
+
+        val users = UserEntity.createFromUsers(userEntities)
+
+        assertEquals(2, userEntities.size)
+        assertEquals(id1, users[0].id)
+        assertEquals(forename1, users[0].forename)
+        assertEquals(surname1, users[0].surname)
+        assertEquals(id2, users[1].id)
+        assertEquals(forename2, users[1].forename)
+        assertEquals(surname2, users[1].surname)
     }
 }

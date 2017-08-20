@@ -29,8 +29,6 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 
 
-
-
 @RunWith(SpringRunner::class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -56,20 +54,16 @@ class UserControllerIT {
 
         MockitoAnnotations.initMocks(this)
 
-
         controller = UserController(mockRepository)
 
         converter.objectMapper = ObjectMapper().registerModule(KotlinModule())
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).setMessageConverters(converter).build()
-
-
-        `when`(mockRepository.findAll()).thenReturn(users)
-        `when`(mockRepository.findOne(user1.id)).thenReturn(user1)
-        `when`(mockRepository.save(user1)).thenReturn(user1)
     }
 
     @Test
     fun `GET with no parameters returns all elements`() {
+
+        `when`(mockRepository.findAll()).thenReturn(users)
 
         mockMvc.perform(get("/api/v1/users"))
                 .andExpect(status().is2xxSuccessful)
@@ -84,6 +78,8 @@ class UserControllerIT {
 
     @Test
     fun `GET with UUID returns specific element`() {
+
+        `when`(mockRepository.findOne(user1.id)).thenReturn(user1)
 
         mockMvc.perform(get("/api/v1/users/${user1.id}"))
                 .andExpect(status().is2xxSuccessful)
@@ -103,38 +99,54 @@ class UserControllerIT {
     @Test
     fun `DELETE with UUID removes specific element`() {
 
+        //TODO: Not sure about this.. the entity is not in the repository.
         mockMvc.perform(delete("/api/v1/users/${user1.id}"))
                 .andExpect(status().is2xxSuccessful)
-                .andExpect(jsonPath("$.id", equalTo(user1.id.toString())))
-                .andExpect(jsonPath("$.forename", equalTo(user1.forename)))
-                .andExpect(jsonPath("$.surname", equalTo(user1.surname)))
     }
 
     @Test
-    fun `POST with duplicate user returns Duplicate Item Exception`() {
+    fun `POST with new user is successful`() {
+
+        `when`(mockRepository.save(user1)).thenReturn(user1)
 
         val content = converter.objectMapper.writeValueAsString(user1);
 
         mockMvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isConflict)
+                .andExpect(status().is2xxSuccessful)
                 .andExpect(jsonPath("$.id", equalTo(user1.id.toString())))
                 .andExpect(jsonPath("$.forename", equalTo(user1.forename)))
                 .andExpect(jsonPath("$.surname", equalTo(user1.surname)))
     }
 
 //    @Test
-//    fun `PUT with valid user updates existing user`() {
+//    fun `POST with duplicate user returns Duplicate Item Exception`() {
 //
 //        val content = converter.objectMapper.writeValueAsString(user1);
 //
 //        mockMvc.perform(post("/api/v1/users")
 //                .contentType(MediaType.APPLICATION_JSON)
 //                .content(content).accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isCreated)
+//                .andExpect(status().isConflict)
 //                .andExpect(jsonPath("$.id", equalTo(user1.id.toString())))
 //                .andExpect(jsonPath("$.forename", equalTo(user1.forename)))
 //                .andExpect(jsonPath("$.surname", equalTo(user1.surname)))
 //    }
+
+    @Test
+    fun `PUT with valid user updates existing user`() {
+
+        `when`(mockRepository.save(user1)).thenReturn(user1)
+
+        val content = converter.objectMapper.writeValueAsString(user1);
+
+        mockMvc.perform(post("/api/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated)
+                .andExpect(jsonPath("$.id", equalTo(user1.id.toString())))
+                .andExpect(jsonPath("$.forename", equalTo(user1.forename)))
+                .andExpect(jsonPath("$.surname", equalTo(user1.surname)))
+    }
 }

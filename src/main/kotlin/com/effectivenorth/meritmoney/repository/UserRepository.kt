@@ -11,5 +11,4 @@ interface UserRepository : CrudRepository<UserEntity, UUID> {
 
     fun findByForename(forename: String): UserEntity
     fun findBySurname(surname: String): UserEntity
-
 }

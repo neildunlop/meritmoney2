@@ -19,20 +19,20 @@ class UserController(val userRepository: UserRepository) {
 
     @GetMapping(value = "/{id}", produces = arrayOf("application/json"))
     fun getUser(@PathVariable id: String): User {
-
         val foundUser = userRepository.findOne(UUID.fromString(id)) ?: throw NotFoundItemException()
         return User.createFromEntity(foundUser)
     }
-
 
     @GetMapping(produces = arrayOf("application/json"))
     fun getAllUsers(): ResponseEntity<List<User>> =
             ResponseEntity(User.createFromEntities(userRepository.findAll().toList()), HttpStatus.OK)
 
-
     @PostMapping(consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
     fun addUser(@RequestBody user: User): ResponseEntity<User> =
             ResponseEntity(User.createFromEntity(userRepository.save(UserEntity.createFromUser(user))), HttpStatus.CREATED)
 
-    //TODO("Delete method")
+    @DeleteMapping(value = "/{id}")
+    fun deleteUser(@PathVariable id: String) {
+        return  userRepository.delete(UUID.fromString(id))
+    }
 }
